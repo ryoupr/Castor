@@ -57,4 +57,36 @@
   }).observe(document.body, { childList: true, subtree: true });
 
   setTimeout(updateVisibility, 1000);
+
+  // --- Enter=改行, Ctrl+Enter=送信 ---
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter' || e.isComposing) return;
+    const editor = e.target.closest('.ql-editor');
+    if (!editor) return;
+
+    if (e.ctrlKey) {
+      // Ctrl+Enter: 送信ボタンをクリック
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      const sendBtn = document.querySelector('.send-button:not(.stop), [aria-label*="送信"]');
+      if (sendBtn) sendBtn.click();
+    } else if (!e.shiftKey && !e.metaKey) {
+      // Enter単体: 改行挿入（Geminiのデフォルト送信を阻止）
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      document.execCommand('insertLineBreak');
+    }
+  }, true);
+
+  // --- Ctrl+C: 停止ボタンクリック ---
+  document.addEventListener('keydown', (e) => {
+    if (e.ctrlKey && e.key === 'c' && !window.getSelection().toString()) {
+      const stopBtn = document.querySelector('[aria-label*="停止"], [aria-label*="stop"], button.stop');
+      if (stopBtn) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        stopBtn.click();
+      }
+    }
+  }, true);
 })();
