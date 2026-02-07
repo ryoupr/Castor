@@ -1,0 +1,23 @@
+# Chrome Extension build artifacts
+*.crx
+*.pem
+*.zip
+
+# Dependencies
+node_modules/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+temp-chrome-extension/
+
+# Environment variables
+.env
