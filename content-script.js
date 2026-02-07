@@ -1,23 +1,24 @@
 // Castor - Gemini UI Enhancer
 (() => {
   // --- 横幅設定の適用 ---
-  const applyMaxWidth = (val, unit) => {
-    const css = unit === 'percent' ? val + '%' : val + 'px';
+  let cachedUnit = 'percent';
+  let cachedWidth = 90;
+
+  const applyMaxWidth = () => {
+    const css = cachedUnit === 'percent' ? cachedWidth + '%' : cachedWidth + 'px';
     document.documentElement.style.setProperty('--castor-max-width', css);
   };
 
   chrome.storage.local.get(['maxWidth', 'widthUnit'], (data) => {
-    const unit = data.widthUnit || 'percent';
-    applyMaxWidth(data.maxWidth || (unit === 'percent' ? 90 : 1200), unit);
+    cachedUnit = data.widthUnit || 'percent';
+    cachedWidth = data.maxWidth || (cachedUnit === 'percent' ? 90 : 1200);
+    applyMaxWidth();
   });
 
   chrome.storage.onChanged.addListener((changes) => {
-    if (changes.maxWidth || changes.widthUnit) {
-      chrome.storage.local.get(['maxWidth', 'widthUnit'], (data) => {
-        const unit = data.widthUnit || 'percent';
-        applyMaxWidth(data.maxWidth || (unit === 'percent' ? 90 : 1200), unit);
-      });
-    }
+    if (changes.widthUnit) cachedUnit = changes.widthUnit.newValue || 'percent';
+    if (changes.maxWidth) cachedWidth = changes.maxWidth.newValue || (cachedUnit === 'percent' ? 90 : 1200);
+    if (changes.maxWidth || changes.widthUnit) applyMaxWidth();
   });
 
   // --- 最下部スクロールボタン ---

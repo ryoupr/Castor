@@ -17,13 +17,17 @@ const setUnit = (unit) => {
   input.step = unit === 'percent' ? 5 : 50;
 };
 
+const limits = { percent: { min: 50, max: 100 }, px: { min: 600, max: 3000 } };
+
 const save = () => {
-  const val = parseInt(input.value, 10);
-  if (!isNaN(val)) {
-    chrome.storage.local.set({ maxWidth: val, widthUnit: currentUnit });
-    status.textContent = '保存しました';
-    setTimeout(() => status.textContent = '', 1500);
-  }
+  let val = parseInt(input.value, 10);
+  if (isNaN(val)) return;
+  const { min, max } = limits[currentUnit];
+  val = Math.max(min, Math.min(max, val));
+  input.value = val;
+  chrome.storage.local.set({ maxWidth: val, widthUnit: currentUnit });
+  status.textContent = '保存しました';
+  setTimeout(() => status.textContent = '', 1500);
 };
 
 chrome.storage.local.get(['maxWidth', 'widthUnit'], (data) => {
