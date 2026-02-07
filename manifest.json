@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Castor - Gemini UI Enhancer",
   "version": "1.0.0",
-  "description": "Gemini の UI を改善する Chrome 拡張機能（横幅拡大・最下部スクロールボタン）",
+  "description": "Enhance Gemini UI - wider chat layout, scroll-to-bottom, Enter=newline, Ctrl+Enter=send, Ctrl+C=stop",
   "permissions": ["storage"],
   "action": {
     "default_popup": "popup.html",
