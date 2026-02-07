@@ -33,15 +33,18 @@ chrome.storage.local.get(['maxWidth', 'widthUnit'], (data) => {
 });
 
 btnPercent.addEventListener('click', () => {
+  if (currentUnit === 'percent') return;
   setUnit('percent');
   input.value = defaults.percent;
   save();
 });
 
 btnPx.addEventListener('click', () => {
+  if (currentUnit === 'px') return;
   setUnit('px');
   input.value = defaults.px;
   save();
 });
 
 input.addEventListener('input', save);
+input.addEventListener('change', save);

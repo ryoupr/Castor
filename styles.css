@@ -7,8 +7,7 @@
 .conversation-container,
 .response-container,
 .response-content,
-.model-response-text,
-[class*="conversation"] {
+.model-response-text {
   max-width: min(var(--castor-max-width), 100%) !important;
   margin-left: auto !important;
   margin-right: auto !important;
@@ -35,8 +34,7 @@ user-query {
   text-align: left !important;
 }
 
-.chat-window,
-[class*="conversation"] {
+.chat-window {
   padding-left: 2vw !important;
   padding-right: 2vw !important;
 }
