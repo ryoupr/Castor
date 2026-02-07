@@ -1,1 +1,71 @@
-/* Chrome拡張機能用スタイルシート */
+/* Gemini UI Enhancer - 横幅拡大 */
+:root {
+  --castor-max-width: 90%;
+}
+
+.chat-window,
+.conversation-container,
+.response-container,
+.response-content,
+.model-response-text,
+[class*="conversation"] {
+  max-width: min(var(--castor-max-width), 100%) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* ユーザー発言の親要素も制限解除 */
+user-query {
+  max-width: 100% !important;
+  display: flex !important;
+  justify-content: flex-end !important;
+  padding-right: 4vw !important;
+  box-sizing: border-box !important;
+}
+
+.user-query-bubble-with-background {
+  max-width: min(fit-content, calc(100% - 4vw)) !important;
+  width: auto !important;
+  border-radius: 20px !important;
+  padding-right: 16px !important;
+  padding-left: 16px !important;
+}
+
+.query-text {
+  text-align: left !important;
+}
+
+.chat-window,
+[class*="conversation"] {
+  padding-left: 2vw !important;
+  padding-right: 2vw !important;
+}
+
+/* 最下部スクロールボタン */
+.castor-scroll-btn {
+  position: fixed;
+  bottom: 100px;
+  right: 32px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  background: #1a73e8;
+  color: #fff;
+  font-size: 22px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  z-index: 10000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s;
+}
+
+.castor-scroll-btn:hover {
+  background: #1557b0;
+}
+
+.castor-scroll-btn.castor-visible {
+  display: flex;
+}

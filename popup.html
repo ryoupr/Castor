@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body { width: 240px; padding: 12px; font-family: sans-serif; font-size: 14px; }
+    label { display: block; margin-bottom: 4px; }
+    input[type="number"] { width: 80px; padding: 4px; }
+    .row { display: flex; align-items: center; gap: 8px; }
+    #status { color: #1a73e8; font-size: 12px; margin-top: 8px; }
+    .toggle { display: flex; background: #e0e0e0; border-radius: 4px; overflow: hidden; margin-bottom: 8px; }
+    .toggle button { flex: 1; border: none; padding: 6px 12px; cursor: pointer; background: transparent; font-size: 13px; }
+    .toggle button.active { background: #1a73e8; color: #fff; }
+  </style>
+</head>
+<body>
+  <label>チャット横幅の上限</label>
+  <div class="toggle">
+    <button id="btnPercent" data-unit="percent">％</button>
+    <button id="btnPx" data-unit="px">px</button>
+  </div>
+  <div class="row">
+    <input type="number" id="maxWidth">
+    <span id="unitLabel">%</span>
+  </div>
+  <div id="status"></div>
+  <script src="popup.js"></script>
+</body>
+</html>
