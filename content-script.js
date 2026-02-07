@@ -22,41 +22,14 @@
 
   // --- 最下部スクロールボタン ---
   const btn = document.createElement('button');
-  btn.className = 'castor-scroll-btn';
+  btn.className = 'castor-scroll-btn castor-visible';
   btn.textContent = '↓';
   btn.title = '最下部へスクロール';
   document.body.appendChild(btn);
 
-  let scrollTarget = null;
-
-  const findScrollContainer = () => {
-    const candidates = document.querySelectorAll('[class*="scroll"], [class*="chat"], main, [role="main"]');
-    for (const el of candidates) {
-      if (el.scrollHeight > el.clientHeight + 100) return el;
-    }
-    return document.documentElement;
-  };
-
-  const updateVisibility = () => {
-    const el = scrollTarget || findScrollContainer();
-    scrollTarget = el;
-    const distanceFromBottom = el.scrollHeight - el.scrollTop - el.clientHeight;
-    btn.classList.toggle('castor-visible', distanceFromBottom > 200);
-  };
-
   btn.addEventListener('click', () => {
-    const el = scrollTarget || findScrollContainer();
-    el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
+    window.dispatchEvent(new CustomEvent('castor-scroll-bottom'));
   });
-
-  document.addEventListener('scroll', updateVisibility, true);
-
-  new MutationObserver(() => {
-    scrollTarget = null;
-    updateVisibility();
-  }).observe(document.body, { childList: true, subtree: true });
-
-  setTimeout(updateVisibility, 1000);
 
   // --- Enter=改行, Ctrl+Enter=送信 ---
   document.addEventListener('keydown', (e) => {

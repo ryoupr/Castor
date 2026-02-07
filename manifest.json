@@ -13,6 +13,12 @@
       "js": ["content-script.js"],
       "css": ["styles.css"],
       "run_at": "document_end"
+    },
+    {
+      "matches": ["https://gemini.google.com/*"],
+      "js": ["scroll-helper.js"],
+      "run_at": "document_end",
+      "world": "MAIN"
     }
   ]
 }
