@@ -21,3 +21,4 @@ temp-chrome-extension/
 
 # Environment variables
 .env
+*.zip

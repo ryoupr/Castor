@@ -1,1 +1,69 @@
-/* Chrome拡張機能用スタイルシート */
+/* Gemini UI Enhancer - 横幅拡大 */
+:root {
+  --castor-max-width: 90%;
+}
+
+.chat-window,
+.conversation-container,
+.response-container,
+.response-content,
+.model-response-text {
+  max-width: min(var(--castor-max-width), 100%) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* ユーザー発言の親要素も制限解除 */
+user-query {
+  max-width: 100% !important;
+  display: flex !important;
+  justify-content: flex-end !important;
+  padding-right: 4vw !important;
+  box-sizing: border-box !important;
+}
+
+.user-query-bubble-with-background {
+  max-width: min(fit-content, calc(100% - 4vw)) !important;
+  width: auto !important;
+  border-radius: 20px !important;
+  padding-right: 16px !important;
+  padding-left: 16px !important;
+}
+
+.query-text {
+  text-align: left !important;
+}
+
+.chat-window {
+  padding-left: 2vw !important;
+  padding-right: 2vw !important;
+}
+
+/* 最下部スクロールボタン */
+.castor-scroll-btn {
+  position: fixed;
+  bottom: 100px;
+  right: 24px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgb(60, 60, 62);
+  background: rgb(40, 40, 42);
+  color: rgb(227, 227, 227);
+  font-size: 18px;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  z-index: 10000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+
+.castor-scroll-btn:hover {
+  background: rgb(55, 55, 58);
+}
+
+.castor-scroll-btn.castor-visible {
+  display: flex;
+}

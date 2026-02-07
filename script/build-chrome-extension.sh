@@ -79,6 +79,20 @@ for CSS_FILE in $(grep -o '"[^"]*\.css"' manifest.json | tr -d '"'); do
     fi
 done
 
+# HTMLファイルと参照JSをコピー
+for HTML_FILE in $(grep -o '"[^"]*\.html"' manifest.json | tr -d '"'); do
+    if [ -f "$HTML_FILE" ]; then
+        cp "$HTML_FILE" "$TEMP_DIR/$HTML_FILE"
+        print_info "✓ $HTML_FILE をコピーしました"
+        for REF_JS in $(grep -o 'src="[^"]*\.js"' "$HTML_FILE" 2>/dev/null | sed 's/src="//;s/"//'); do
+            if [ -f "$REF_JS" ] && [ ! -f "$TEMP_DIR/$REF_JS" ]; then
+                cp "$REF_JS" "$TEMP_DIR/$REF_JS"
+                print_info "✓ $REF_JS をコピーしました（$HTML_FILE から参照）"
+            fi
+        done
+    fi
+done
+
 # ディレクトリをコピー
 if [ -d "icons" ]; then
     cp -r icons "$TEMP_DIR/"
