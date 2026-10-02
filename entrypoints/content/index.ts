@@ -1,5 +1,18 @@
 // Castor - Gemini UI Enhancer
 import './style.css';
+import { findSendButton, findStopButton } from '@/utils/gemini-dom';
+
+// input / textarea 内の選択は window.getSelection() に現れないため、個別に確認する
+const hasTextSelection = (target: EventTarget | null): boolean => {
+  if (
+    (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement) &&
+    target.selectionStart !== null &&
+    target.selectionStart !== target.selectionEnd
+  ) {
+    return true;
+  }
+  return !!window.getSelection()?.toString();
+};
 
 type WidthUnit = 'percent' | 'px';
 
@@ -65,8 +78,7 @@ export default defineContentScript({
           // Ctrl+Enter: 送信ボタンをクリック
           e.preventDefault();
           e.stopImmediatePropagation();
-          const sendBtn = document.querySelector<HTMLElement>('.send-button:not(.stop), [aria-label*="送信"]');
-          sendBtn?.click();
+          findSendButton()?.click();
         } else if (!e.shiftKey && !e.metaKey) {
           // Enter単体: 改行挿入（Geminiのデフォルト送信を阻止）
           e.preventDefault();
@@ -77,19 +89,22 @@ export default defineContentScript({
       { capture: true },
     );
 
-    // --- Ctrl+C: 停止ボタンクリック ---
+    // --- Ctrl+C: 生成中なら停止ボタンをクリック（テキスト選択中は通常のコピー） ---
     ctx.addEventListener(
       document,
       'keydown',
       (e) => {
-        if (e.ctrlKey && e.key === 'c' && !window.getSelection()?.toString()) {
-          const stopBtn = document.querySelector<HTMLElement>('[aria-label*="停止"], [aria-label*="stop"], button.stop');
-          if (stopBtn) {
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            stopBtn.click();
-          }
-        }
+        if (!e.ctrlKey || e.metaKey || e.altKey || e.shiftKey || e.isComposing) return;
+        // 非ラテン文字の配列（e.key が 'с' などになる）では物理キー位置 e.code で判定する。
+        // ラテン文字の配列では e.key だけを見る（Dvorak では KeyC が 'j' なので、e.code を使うと Ctrl+J を横取りしてしまう）
+        const isC = e.key.toLowerCase() === 'c' || (!/^[a-z]$/i.test(e.key) && e.code === 'KeyC');
+        if (!isC || hasTextSelection(e.target)) return;
+        // 停止ボタンは生成中しか存在しないので、生成中でなければ何もしない
+        const stopBtn = findStopButton();
+        if (!stopBtn) return;
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        stopBtn.click();
       },
       { capture: true },
     );
