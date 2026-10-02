@@ -23,7 +23,8 @@ user-query {
 }
 
 .user-query-bubble-with-background {
-  max-width: min(fit-content, calc(100% - 4vw)) !important;
+  /* min() の引数に fit-content などのキーワードは書けない（宣言ごと無効になる）: https://developer.mozilla.org/ja/docs/Web/CSS/min */
+  max-width: calc(100% - 4vw) !important;
   width: auto !important;
   border-radius: 20px !important;
   padding-right: 16px !important;
