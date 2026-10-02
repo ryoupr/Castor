@@ -74,7 +74,7 @@ npm run build
 - スクロール処理は CSP 制約のため `world: 'MAIN'` の別コンテンツスクリプトとして実行（MAIN world では拡張機能 API は使えない。参考: https://wxt.dev/guide/essentials/content-scripts.html ）
 - 多言語対応は Chrome 標準の `i18n` API + `public/_locales/`（`default_locale: en`）。文言を追加するときは全ロケールの `messages.json` に同じキーを追加する（参考: https://wxt.dev/guide/essentials/i18n.html ）
 - 英語・日本語以外の翻訳は機械的に作成したもので、ネイティブチェックは未実施
-- Ctrl+Enter / Ctrl+C の送信・停止ボタン検出は class セレクタが主で、`aria-label` によるフォールバックは Gemini が日本語・英語表示のときのみ有効
+- Ctrl+Enter / Ctrl+C の送信・停止ボタンは、入力欄（`input-area-v2`）の中だけを class（`.send-button` / `.stop`）で探し、内側の `button` をクリックする。`aria-label` は UI 言語で変わり、サイドバーのチャット履歴のタイトルにも一致するため使わない。Gemini の DOM に依存するセレクタは `utils/gemini-dom.ts` にまとめている
 
 ## ライセンス
 
