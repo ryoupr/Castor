@@ -1,0 +1,17 @@
+{
+  "appName": {
+    "message": "Castor - Gemini UI Enhancer"
+  },
+  "appDesc": {
+    "message": "تحسين واجهة Gemini - دردشة أعرض، التمرير إلى الأسفل، Enter=سطر جديد، Ctrl+Enter=إرسال، Ctrl+C=إيقاف"
+  },
+  "widthLabel": {
+    "message": "الحد الأقصى لعرض الدردشة"
+  },
+  "saved": {
+    "message": "تم الحفظ"
+  },
+  "scrollToBottom": {
+    "message": "التمرير إلى الأسفل"
+  }
+}

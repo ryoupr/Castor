@@ -1,0 +1,17 @@
+{
+  "appName": {
+    "message": "Castor - Gemini UI Enhancer"
+  },
+  "appDesc": {
+    "message": "Gemini の UI を改善 - チャット横幅の拡大、最下部スクロール、Enter=改行、Ctrl+Enter=送信、Ctrl+C=生成停止"
+  },
+  "widthLabel": {
+    "message": "チャット横幅の上限"
+  },
+  "saved": {
+    "message": "保存しました"
+  },
+  "scrollToBottom": {
+    "message": "最下部へスクロール"
+  }
+}

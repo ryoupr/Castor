@@ -1,0 +1,17 @@
+{
+  "appName": {
+    "message": "Castor - Gemini UI Enhancer"
+  },
+  "appDesc": {
+    "message": "Gemini UI উন্নত করুন - চওড়া চ্যাট লেআউট, নিচে স্ক্রল, Enter=নতুন লাইন, Ctrl+Enter=পাঠান, Ctrl+C=থামান"
+  },
+  "widthLabel": {
+    "message": "চ্যাটের সর্বোচ্চ প্রস্থ"
+  },
+  "saved": {
+    "message": "সংরক্ষিত হয়েছে"
+  },
+  "scrollToBottom": {
+    "message": "একেবারে নিচে স্ক্রল করুন"
+  }
+}

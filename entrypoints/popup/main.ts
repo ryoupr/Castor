@@ -12,6 +12,15 @@ const btnPercent = getEl<HTMLButtonElement>('btnPercent');
 const btnPx = getEl<HTMLButtonElement>('btnPx');
 const status = getEl<HTMLDivElement>('status');
 
+// --- i18n: ブラウザの UI 言語に合わせて文言・lang・dir を適用 ---
+document.documentElement.lang = browser.i18n.getUILanguage();
+document.documentElement.dir = browser.i18n.getMessage('@@bidi_dir') || 'ltr';
+document.querySelectorAll<HTMLElement>('[data-i18n]').forEach((el) => {
+  const key = el.dataset.i18n;
+  const msg = key ? browser.i18n.getMessage(key as Parameters<typeof browser.i18n.getMessage>[0]) : '';
+  if (msg) el.textContent = msg;
+});
+
 const defaults: Record<WidthUnit, number> = { percent: 90, px: 1200 };
 const limits: Record<WidthUnit, { min: number; max: number; step: number }> = {
   percent: { min: 50, max: 100, step: 5 },
@@ -36,7 +45,7 @@ const save = () => {
   val = Math.max(min, Math.min(max, val));
   input.value = String(val);
   void browser.storage.local.set({ maxWidth: val, widthUnit: currentUnit });
-  status.textContent = '保存しました';
+  status.textContent = browser.i18n.getMessage('saved');
   setTimeout(() => (status.textContent = ''), 1500);
 };
 

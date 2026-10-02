@@ -14,7 +14,8 @@
 │       ├── index.ts             # コンテンツスクリプト
 │       └── style.css            # コンテンツスクリプト用スタイル
 ├── public/                      # そのまま出力にコピーされる静的ファイル
-│   └── icon/                    # アイコン（{16,32,48,128}.png を自動検出）
+│   ├── icon/                    # アイコン（{16,32,48,128}.png を自動検出）
+│   └── _locales/                # 多言語メッセージ（<locale>/messages.json、オプション）
 ├── screenshot/                  # スクリーンショット格納
 └── script/                      # アセット用スクリプト
     ├── generate-icons.sh

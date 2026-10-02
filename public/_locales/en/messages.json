@@ -1,0 +1,22 @@
+{
+  "appName": {
+    "message": "Castor - Gemini UI Enhancer",
+    "description": "Extension name"
+  },
+  "appDesc": {
+    "message": "Enhance Gemini UI - wider chat layout, scroll-to-bottom, Enter=newline, Ctrl+Enter=send, Ctrl+C=stop",
+    "description": "Extension description (max 132 characters)"
+  },
+  "widthLabel": {
+    "message": "Max chat width",
+    "description": "Popup label for the chat width setting"
+  },
+  "saved": {
+    "message": "Saved",
+    "description": "Popup status shown after the setting is saved"
+  },
+  "scrollToBottom": {
+    "message": "Scroll to bottom",
+    "description": "Tooltip of the scroll-to-bottom button on Gemini"
+  }
+}

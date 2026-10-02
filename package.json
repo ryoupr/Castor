@@ -2,7 +2,7 @@
   "name": "castor",
   "description": "Enhance Gemini UI - wider chat layout, scroll-to-bottom, Enter=newline, Ctrl+Enter=send, Ctrl+C=stop",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.1.0",
   "type": "module",
   "engines": {
     "node": ">=22"
