@@ -30,6 +30,18 @@ fi
 VERSION=$(grep -o '"version"[[:space:]]*:[[:space:]]*"[^"]*"' manifest.json | sed 's/.*"\([^"]*\)".*/\1/')
 NAME=$(grep -o '"name"[[:space:]]*:[[:space:]]*"[^"]*"' manifest.json | sed 's/.*"\([^"]*\)".*/\1/')
 
+# name が __MSG_xxx__ 形式（多言語対応）の場合は default_locale の messages.json から解決
+if [[ "$NAME" =~ ^__MSG_(.+)__$ ]]; then
+    MSG_KEY="${BASH_REMATCH[1]}"
+    DEFAULT_LOCALE=$(grep -o '"default_locale"[[:space:]]*:[[:space:]]*"[^"]*"' manifest.json | sed 's/.*"\([^"]*\)".*/\1/')
+    MESSAGES_FILE="_locales/${DEFAULT_LOCALE:-en}/messages.json"
+    if [ ! -f "$MESSAGES_FILE" ]; then
+        print_error "$MESSAGES_FILE が見つかりません。"
+        exit 1
+    fi
+    NAME=$(python3 -c 'import json, sys; print(json.load(open(sys.argv[1], encoding="utf-8"))[sys.argv[2]]["message"])' "$MESSAGES_FILE" "$MSG_KEY")
+fi
+
 if [ -z "$VERSION" ] || [ -z "$NAME" ]; then
     print_error "manifest.jsonからバージョンまたは名前を取得できませんでした。"
     exit 1
@@ -99,6 +111,14 @@ if [ -d "icons" ]; then
     print_info "✓ icons/ ディレクトリをコピーしました"
 else
     print_warning "icons/ ディレクトリが見つかりません"
+fi
+
+if [ -d "_locales" ]; then
+    cp -r _locales "$TEMP_DIR/"
+    print_info "✓ _locales/ ディレクトリをコピーしました"
+elif grep -q '"default_locale"' manifest.json; then
+    print_error "manifest.json に default_locale がありますが、_locales/ ディレクトリが見つかりません"
+    exit 1
 fi
 
 if [ -d "lib" ]; then

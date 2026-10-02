@@ -4,6 +4,14 @@ const btnPercent = document.getElementById('btnPercent');
 const btnPx = document.getElementById('btnPx');
 const status = document.getElementById('status');
 
+// --- i18n: ブラウザの UI 言語に合わせて文言・lang・dir を適用 ---
+document.documentElement.lang = chrome.i18n.getUILanguage();
+document.documentElement.dir = chrome.i18n.getMessage('@@bidi_dir') || 'ltr';
+document.querySelectorAll('[data-i18n]').forEach((el) => {
+  const msg = chrome.i18n.getMessage(el.dataset.i18n);
+  if (msg) el.textContent = msg;
+});
+
 const defaults = { percent: 90, px: 1200 };
 let currentUnit = 'percent';
 
@@ -26,7 +34,7 @@ const save = () => {
   val = Math.max(min, Math.min(max, val));
   input.value = val;
   chrome.storage.local.set({ maxWidth: val, widthUnit: currentUnit });
-  status.textContent = '保存しました';
+  status.textContent = chrome.i18n.getMessage('saved');
   setTimeout(() => status.textContent = '', 1500);
 };
 

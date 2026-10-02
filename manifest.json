@@ -1,8 +1,9 @@
 {
   "manifest_version": 3,
-  "name": "Castor - Gemini UI Enhancer",
-  "version": "1.0.0",
-  "description": "Enhance Gemini UI - wider chat layout, scroll-to-bottom, Enter=newline, Ctrl+Enter=send, Ctrl+C=stop",
+  "name": "__MSG_appName__",
+  "version": "1.1.0",
+  "description": "__MSG_appDesc__",
+  "default_locale": "en",
   "permissions": ["storage"],
   "action": {
     "default_popup": "popup.html",

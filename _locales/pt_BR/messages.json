@@ -1,0 +1,17 @@
+{
+  "appName": {
+    "message": "Castor - Gemini UI Enhancer"
+  },
+  "appDesc": {
+    "message": "Melhora a interface do Gemini: chat mais largo, rolar até o fim, Enter=nova linha, Ctrl+Enter=enviar, Ctrl+C=parar"
+  },
+  "widthLabel": {
+    "message": "Largura máxima do chat"
+  },
+  "saved": {
+    "message": "Salvo"
+  },
+  "scrollToBottom": {
+    "message": "Rolar até o fim"
+  }
+}

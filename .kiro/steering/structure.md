@@ -9,6 +9,7 @@
 ├── manifest.json                # Chrome拡張機能設定
 ├── content-script.js            # コンテンツスクリプト
 ├── styles.css                   # スタイルシート
+├── _locales/                    # 多言語メッセージ（<locale>/messages.json、オプション）
 ├── icons/                       # アイコンファイル格納
 ├── screenshot/                  # スクリーンショット格納
 ├── lib/                         # ライブラリファイル（オプション）

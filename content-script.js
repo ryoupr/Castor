@@ -25,7 +25,8 @@
   const btn = document.createElement('button');
   btn.className = 'castor-scroll-btn castor-visible';
   btn.textContent = '↓';
-  btn.title = '最下部へスクロール';
+  btn.title = chrome.i18n.getMessage('scrollToBottom');
+  btn.setAttribute('aria-label', btn.title);
   document.body.appendChild(btn);
 
   btn.addEventListener('click', () => {

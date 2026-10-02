@@ -1,0 +1,17 @@
+{
+  "appName": {
+    "message": "Castor - Gemini UI Enhancer"
+  },
+  "appDesc": {
+    "message": "Улучшение интерфейса Gemini: широкий чат, прокрутка вниз, Enter=новая строка, Ctrl+Enter=отправить, Ctrl+C=стоп"
+  },
+  "widthLabel": {
+    "message": "Максимальная ширина чата"
+  },
+  "saved": {
+    "message": "Сохранено"
+  },
+  "scrollToBottom": {
+    "message": "Прокрутить вниз"
+  }
+}
