@@ -7,7 +7,7 @@
 ## フレームワーク
 - **[WXT](https://wxt.dev/)**: Vite ベースのブラウザ拡張機能フレームワーク
   - Manifest V3 の manifest.json をエントリーポイントと `wxt.config.ts` から自動生成
-  - 開発時は拡張機能を読み込んだブラウザを起動し、ホットリロード
+  - 開発時は拡張機能を読み込んだブラウザを起動し、ホットリロード（ブラウザ起動には devDependencies の `web-ext` を使用。未インストールだと手動読み込みになる: https://wxt.dev/guide/essentials/config/browser-startup.html ）
   - `defineContentScript` / `defineBackground` / `browser` などを自動 import
 - **TypeScript**
 
