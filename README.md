@@ -38,6 +38,8 @@ npm run build
 | `./script/generate-icons.sh <画像>` | アイコン一括生成（`public/icon/`） |
 | `./script/resize-to-1280x800.sh <画像>` | スクリーンショットを 1280x800 にリサイズ |
 
+PR と main への push では、GitHub Actions（`.github/workflows/ci.yml`）が `npm ci` → `npm run compile` → `npm run build` を実行します。
+
 ## 使い方
 
 - ツールバーの Castor アイコンをクリックして横幅を設定
@@ -48,6 +50,7 @@ npm run build
 ## ファイル構成
 
 ```
+├── .github/workflows/ci.yml          # CI（型チェックとビルド）
 ├── package.json                      # name / version / description（manifest に反映）
 ├── wxt.config.ts                     # manifest 設定（name / permissions / action）
 ├── entrypoints/
@@ -73,6 +76,7 @@ npm run build
 - スクロール処理は content script（isolated world）から直接行う。isolated world でも DOM はページと共有される（参考: https://developer.chrome.com/docs/extensions/develop/concepts/content-scripts#isolated_world ）
 - Enter キー制御は `stopImmediatePropagation` で Zone.js/Angular のイベントを阻止
 - IME 変換中は `e.isComposing` で Enter 処理をスキップ
+- Enter 単体の改行は、元の keydown を止めたうえで、入力欄（Quill の `.ql-editor`）に Shift+Enter の keydown を送り直して行う。Quill が改行として処理するため、Quill のデータや Undo とずれない（非推奨の `document.execCommand` は使わない: https://developer.mozilla.org/ja/docs/Web/API/Document/execCommand ）
 - 横幅設定は `chrome.storage.local` に単位ごとの別キー（`widthUnit` / `maxWidthPercent` / `maxWidthPx`）で保存する。v1.1.0 までの `maxWidth` は、ポップアップを開いたときに新キーへ移行する（移行前でも読み込み時に旧キーを解釈するので表示は変わらない）
 - 多言語対応は Chrome 標準の `i18n` API + `public/_locales/`（`default_locale: en`）。文言を追加するときは全ロケールの `messages.json` に同じキーを追加する（参考: https://wxt.dev/guide/essentials/i18n.html ）
 - 英語・日本語以外の翻訳は機械的に作成したもので、ネイティブチェックは未実施
