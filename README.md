@@ -38,6 +38,8 @@ npm run build
 | `./script/generate-icons.sh <画像>` | アイコン一括生成（`public/icon/`） |
 | `./script/resize-to-1280x800.sh <画像>` | スクリーンショットを 1280x800 にリサイズ |
 
+PR と main への push では、GitHub Actions（`.github/workflows/ci.yml`）が `npm ci` → `npm run compile` → `npm run build` を実行します。
+
 ## 使い方
 
 - ツールバーの Castor アイコンをクリックして横幅を設定
@@ -48,6 +50,7 @@ npm run build
 ## ファイル構成
 
 ```
+├── .github/workflows/ci.yml          # CI（型チェックとビルド）
 ├── package.json                      # name / version / description（manifest に反映）
 ├── wxt.config.ts                     # manifest 設定（name / permissions / action）
 ├── entrypoints/
