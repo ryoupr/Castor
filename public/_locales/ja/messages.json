@@ -13,5 +13,23 @@
   },
   "scrollToBottom": {
     "message": "最下部へスクロール"
+  },
+  "featuresLabel": {
+    "message": "機能"
+  },
+  "featureEnterNewline": {
+    "message": "Enter で改行"
+  },
+  "featureCtrlEnterSend": {
+    "message": "Ctrl+Enter で送信"
+  },
+  "featureCmdEnterSend": {
+    "message": "Cmd+Enter で送信（macOS）"
+  },
+  "featureCtrlCStop": {
+    "message": "Ctrl+C で生成を停止"
+  },
+  "featureScrollButton": {
+    "message": "最下部スクロールボタン"
   }
 }

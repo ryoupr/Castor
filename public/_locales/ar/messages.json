@@ -13,5 +13,23 @@
   },
   "scrollToBottom": {
     "message": "التمرير إلى الأسفل"
+  },
+  "featuresLabel": {
+    "message": "الميزات"
+  },
+  "featureEnterNewline": {
+    "message": "Enter لإدراج سطر جديد"
+  },
+  "featureCtrlEnterSend": {
+    "message": "Ctrl+Enter للإرسال"
+  },
+  "featureCmdEnterSend": {
+    "message": "Cmd+Enter للإرسال (macOS)"
+  },
+  "featureCtrlCStop": {
+    "message": "Ctrl+C لإيقاف الإنشاء"
+  },
+  "featureScrollButton": {
+    "message": "زر التمرير إلى الأسفل"
   }
 }

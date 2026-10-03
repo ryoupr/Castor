@@ -46,6 +46,7 @@ PR と main への push では、GitHub Actions（`.github/workflows/ci.yml`）�
 - 最下部から離れているときに右下に出る ↓ ボタンで、最下部へスクロール
 - Enter で改行、Ctrl+Enter で送信
 - 生成中に Ctrl+C で停止
+- ポップアップで、上の機能を個別にオン・オフできる。macOS 向けに、Cmd+Enter でも送信するようにできる（既定はオフ）
 
 ## ファイル構成
 
@@ -61,6 +62,7 @@ PR と main への push では、GitHub Actions（`.github/workflows/ci.yml`）�
 │       ├── index.html                # 設定画面
 │       └── main.ts
 ├── utils/settings.ts                 # 設定（横幅）の型・既定値・読み込み（popup と content script で共有）
+├── utils/features.ts                 # 機能ごとのオン・オフ設定（popup と content script で共有）
 ├── utils/gemini-dom.ts               # Gemini の DOM に依存するセレクタ
 ├── public/
 │   ├── icon/                         # アイコン（16/48/128px）
@@ -78,6 +80,7 @@ PR と main への push では、GitHub Actions（`.github/workflows/ci.yml`）�
 - IME 変換中は `e.isComposing` で Enter 処理をスキップ
 - Enter 単体の改行は、元の keydown を止めたうえで、入力欄（Quill の `.ql-editor`）に Shift+Enter の keydown を送り直して行う。Quill が改行として処理するため、Quill のデータや Undo とずれない（非推奨の `document.execCommand` は使わない: https://developer.mozilla.org/ja/docs/Web/API/Document/execCommand ）
 - 横幅設定は `chrome.storage.local` に単位ごとの別キー（`widthUnit` / `maxWidthPercent` / `maxWidthPx`）で保存する。v1.1.0 までの `maxWidth` は、ポップアップを開いたときに新キーへ移行する（移行前でも読み込み時に旧キーを解釈するので表示は変わらない）
+- 機能ごとのオン・オフは `chrome.storage.local` の `features` キーに 1 つのオブジェクトとして保存する。保存されていない項目や boolean 以外の値は既定値（Cmd+Enter での送信だけオフ、ほかはオン）として扱う。オフにした機能のキー操作は横取りせず、Gemini 本来の動作に任せる
 - 多言語対応は Chrome 標準の `i18n` API + `public/_locales/`（`default_locale: en`）。文言を追加するときは全ロケールの `messages.json` に同じキーを追加する（参考: https://wxt.dev/guide/essentials/i18n.html ）
 - 英語・日本語以外の翻訳は機械的に作成したもので、ネイティブチェックは未実施
 - Ctrl+Enter / Ctrl+C の送信・停止ボタンは、入力欄（`input-area-v2`）の中だけを class（`.send-button` / `.stop`）で探し、内側の `button` をクリックする。`aria-label` は UI 言語で変わり、サイドバーのチャット履歴のタイトルにも一致するため使わない。Gemini の DOM に依存するセレクタは `utils/gemini-dom.ts` にまとめている

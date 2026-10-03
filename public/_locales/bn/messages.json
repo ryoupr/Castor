@@ -13,5 +13,23 @@
   },
   "scrollToBottom": {
     "message": "একেবারে নিচে স্ক্রল করুন"
+  },
+  "featuresLabel": {
+    "message": "বৈশিষ্ট্য"
+  },
+  "featureEnterNewline": {
+    "message": "Enter চাপলে নতুন লাইন"
+  },
+  "featureCtrlEnterSend": {
+    "message": "Ctrl+Enter চাপলে পাঠান"
+  },
+  "featureCmdEnterSend": {
+    "message": "Cmd+Enter চাপলে পাঠান (macOS)"
+  },
+  "featureCtrlCStop": {
+    "message": "Ctrl+C চাপলে তৈরি করা বন্ধ করুন"
+  },
+  "featureScrollButton": {
+    "message": "নিচে স্ক্রোল করার বোতাম"
   }
 }

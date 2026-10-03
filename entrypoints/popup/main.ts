@@ -1,3 +1,4 @@
+import { DEFAULT_FEATURES, FEATURE_KEYS, type FeatureKey, type Features, loadFeatures, saveFeatures } from '@/utils/features';
 import {
   type WidthSettings,
   type WidthUnit,
@@ -121,4 +122,40 @@ readWidthStorage()
   .finally(() => {
     render();
     setControlsEnabled(true);
+  });
+
+// --- 機能ごとのオン・オフ ---
+const isFeatureKey = (v: string | undefined): v is FeatureKey => FEATURE_KEYS.includes(v as FeatureKey);
+const featureInputs = new Map<FeatureKey, HTMLInputElement>();
+document.querySelectorAll<HTMLInputElement>('input[data-feature]').forEach((el) => {
+  const key = el.dataset.feature;
+  if (isFeatureKey(key)) featureInputs.set(key, el);
+});
+
+let features: Features = { ...DEFAULT_FEATURES };
+
+const renderFeatures = () => {
+  for (const [key, el] of featureInputs) el.checked = features[key];
+};
+
+for (const [key, el] of featureInputs) {
+  el.addEventListener('change', () => {
+    features = { ...features, [key]: el.checked };
+    void saveFeatures(features);
+    showSaved();
+  });
+}
+
+// 横幅と同じく、読み込みが終わるまで操作できないようにする
+for (const el of featureInputs.values()) el.disabled = true;
+loadFeatures()
+  .then((loaded) => {
+    features = loaded;
+  })
+  .catch(() => {
+    // storage が使えない場合は既定値のまま表示する
+  })
+  .finally(() => {
+    renderFeatures();
+    for (const el of featureInputs.values()) el.disabled = false;
   });
