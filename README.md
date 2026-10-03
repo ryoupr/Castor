@@ -72,6 +72,7 @@ npm run build
 - Gemini は `infinite-scroller` + 仮想スクロールを使用。`scrollIntoView` で最下部移動を実現
 - Enter キー制御は `stopImmediatePropagation` で Zone.js/Angular のイベントを阻止
 - IME 変換中は `e.isComposing` で Enter 処理をスキップ
+- Enter 単体の改行は、元の keydown を止めたうえで、入力欄（Quill の `.ql-editor`）に Shift+Enter の keydown を送り直して行う。Quill が改行として処理するため、Quill のデータや Undo とずれない（非推奨の `document.execCommand` は使わない: https://developer.mozilla.org/ja/docs/Web/API/Document/execCommand ）
 - スクロール処理は CSP 制約のため `world: 'MAIN'` の別コンテンツスクリプトとして実行（MAIN world では拡張機能 API は使えない。参考: https://wxt.dev/guide/essentials/content-scripts.html ）
 - 横幅設定は `chrome.storage.local` に単位ごとの別キー（`widthUnit` / `maxWidthPercent` / `maxWidthPx`）で保存する。v1.1.0 までの `maxWidth` は、ポップアップを開いたときに新キーへ移行する（移行前でも読み込み時に旧キーを解釈するので表示は変わらない）
 - 多言語対応は Chrome 標準の `i18n` API + `public/_locales/`（`default_locale: en`）。文言を追加するときは全ロケールの `messages.json` に同じキーを追加する（参考: https://wxt.dev/guide/essentials/i18n.html ）
