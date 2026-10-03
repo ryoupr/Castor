@@ -1,6 +1,6 @@
 // Castor - Gemini UI Enhancer
 import './style.css';
-import { findSendButton, findStopButton } from '@/utils/gemini-dom';
+import { findChatScroller, findSendButton, findStopButton } from '@/utils/gemini-dom';
 import { STORAGE_KEYS, type WidthSettings, loadWidthSettings, toCssWidth } from '@/utils/settings';
 
 // input / textarea 内の選択は window.getSelection() に現れないため、個別に確認する
@@ -14,6 +14,11 @@ const hasTextSelection = (target: EventTarget | null): boolean => {
   }
   return !!window.getSelection()?.toString();
 };
+
+// スクロールボタンを表示する、最下部からの距離（px。この値以上離れているときに表示する）
+const SCROLL_BTN_THRESHOLD = 200;
+
+const distanceFromBottom = (el: HTMLElement): number => el.scrollHeight - el.scrollTop - el.clientHeight;
 
 export default defineContentScript({
   matches: ['https://gemini.google.com/*'],
@@ -44,17 +49,45 @@ export default defineContentScript({
     ctx.onInvalidated(() => browser.storage.onChanged.removeListener(onStorageChanged));
 
     // --- 最下部スクロールボタン ---
+    // 最下部から SCROLL_BTN_THRESHOLD px 以上離れているときだけ表示する
     const btn = document.createElement('button');
-    btn.className = 'castor-scroll-btn castor-visible';
+    btn.className = 'castor-scroll-btn';
     btn.textContent = '↓';
     btn.title = browser.i18n.getMessage('scrollToBottom');
     btn.setAttribute('aria-label', btn.title);
     document.body.appendChild(btn);
     ctx.onInvalidated(() => btn.remove());
 
+    const updateScrollBtn = () => {
+      const scroller = findChatScroller();
+      btn.classList.toggle('castor-visible', !!scroller && distanceFromBottom(scroller) >= SCROLL_BTN_THRESHOLD);
+    };
+
+    // 更新は 1 フレームに 1 回にまとめる（生成中は DOM の変更が頻繁に起きるため）
+    // ctx.requestAnimationFrame は呼ぶたびに無効化時の後始末を登録して増え続けるため、素の requestAnimationFrame を使い、
+    // 後始末は一度だけ登録する
+    let rafId = 0;
+    const scheduleUpdate = () => {
+      if (rafId) return;
+      rafId = requestAnimationFrame(() => {
+        rafId = 0;
+        updateScrollBtn();
+      });
+    };
+    ctx.onInvalidated(() => cancelAnimationFrame(rafId));
+
+    // scroll はバブリングしないので、document の capture で受け取る
+    ctx.addEventListener(document, 'scroll', scheduleUpdate, { capture: true, passive: true });
+    // 回答の生成やチャットの切り替えで高さが変わったときも判定し直す
+    const observer = new MutationObserver(scheduleUpdate);
+    observer.observe(document.body, { childList: true, subtree: true, characterData: true });
+    ctx.onInvalidated(() => observer.disconnect());
+    scheduleUpdate();
+
     ctx.addEventListener(btn, 'click', () => {
-      // スクロール処理は MAIN world の scroll-helper が担当
-      window.dispatchEvent(new CustomEvent('castor-scroll-bottom'));
+      // isolated world でも DOM はページと共有されるので、直接スクロールできる:
+      // https://developer.chrome.com/docs/extensions/develop/concepts/content-scripts#isolated_world
+      findChatScroller()?.scrollTo({ top: Number.MAX_SAFE_INTEGER, behavior: 'smooth' });
     });
 
     // --- Enter=改行, Ctrl+Enter=送信 ---

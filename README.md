@@ -41,7 +41,7 @@ npm run build
 ## 使い方
 
 - ツールバーの Castor アイコンをクリックして横幅を設定
-- チャット画面右下の ↓ ボタンで最下部へスクロール
+- 最下部から離れているときに右下に出る ↓ ボタンで、最下部へスクロール
 - Enter で改行、Ctrl+Enter で送信
 - 生成中に Ctrl+C で停止
 
@@ -54,11 +54,11 @@ npm run build
 │   ├── content/
 │   │   ├── index.ts                  # メインロジック（isolated world）
 │   │   └── style.css                 # UI スタイル
-│   ├── scroll-helper.content.ts      # スクロール処理（main world）
 │   └── popup/
 │       ├── index.html                # 設定画面
 │       └── main.ts
 ├── utils/settings.ts                 # 設定（横幅）の型・既定値・読み込み（popup と content script で共有）
+├── utils/gemini-dom.ts               # Gemini の DOM に依存するセレクタ
 ├── public/
 │   ├── icon/                         # アイコン（16/48/128px）
 │   └── _locales/                     # 多言語メッセージ（<locale>/messages.json）
@@ -69,10 +69,10 @@ npm run build
 
 ## 技術メモ
 
-- Gemini は `infinite-scroller` + 仮想スクロールを使用。`scrollIntoView` で最下部移動を実現
+- チャット履歴のスクロールコンテナは `infinite-scroller.chat-history`（`infinite-scroller` はほかにもあるが、スクロールするのはこれだけ）。最下部への移動は `scrollTo` で行い、↓ ボタンは最下部から 200px 以上離れているときだけ表示する。最後のメッセージの下には余白があるため、メッセージへの `scrollIntoView` では最下部まで届かない
+- スクロール処理は content script（isolated world）から直接行う。isolated world でも DOM はページと共有される（参考: https://developer.chrome.com/docs/extensions/develop/concepts/content-scripts#isolated_world ）
 - Enter キー制御は `stopImmediatePropagation` で Zone.js/Angular のイベントを阻止
 - IME 変換中は `e.isComposing` で Enter 処理をスキップ
-- スクロール処理は CSP 制約のため `world: 'MAIN'` の別コンテンツスクリプトとして実行（MAIN world では拡張機能 API は使えない。参考: https://wxt.dev/guide/essentials/content-scripts.html ）
 - 横幅設定は `chrome.storage.local` に単位ごとの別キー（`widthUnit` / `maxWidthPercent` / `maxWidthPx`）で保存する。v1.1.0 までの `maxWidth` は、ポップアップを開いたときに新キーへ移行する（移行前でも読み込み時に旧キーを解釈するので表示は変わらない）
 - 多言語対応は Chrome 標準の `i18n` API + `public/_locales/`（`default_locale: en`）。文言を追加するときは全ロケールの `messages.json` に同じキーを追加する（参考: https://wxt.dev/guide/essentials/i18n.html ）
 - 英語・日本語以外の翻訳は機械的に作成したもので、ネイティブチェックは未実施

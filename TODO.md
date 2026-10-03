@@ -14,4 +14,4 @@
 
 ## メモ
 - ブランチ: feature/gemini-ui-enhancement
-- Gemini は仮想スクロール（infinite-scroller）を使用。scrollIntoView で対応済み
+- Gemini のチャット履歴は infinite-scroller.chat-history でスクロールする。scrollTo で最下部へ移動（詳細は README の技術メモ）
