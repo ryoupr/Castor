@@ -73,10 +73,25 @@ export default defineContentScript({
           e.stopImmediatePropagation();
           findSendButton()?.click();
         } else if (!e.shiftKey && !e.metaKey) {
-          // Enter単体: 改行挿入（Geminiのデフォルト送信を阻止）
+          // Enter単体: Geminiのデフォルト送信を阻止し、Shift+Enter を送り直して改行させる。
+          // 入力欄の Quill が Shift+Enter を改行として処理するので、Quill のデータ・Undo とずれない
+          // （非推奨の document.execCommand('insertLineBreak') では、改行が本文の文字として入り、Quill とずれていた）。
+          // 送り直したイベントは shiftKey 付きなので、このリスナーは素通りする
           e.preventDefault();
           e.stopImmediatePropagation();
-          document.execCommand('insertLineBreak');
+          editor.dispatchEvent(
+            new KeyboardEvent('keydown', {
+              key: 'Enter',
+              code: 'Enter',
+              // keyCode / which は非推奨だが、Quill のキー割り当ての照合が which も見るため残す
+              keyCode: 13,
+              which: 13,
+              shiftKey: true,
+              bubbles: true,
+              cancelable: true,
+              composed: true,
+            }),
+          );
         }
       },
       { capture: true },
