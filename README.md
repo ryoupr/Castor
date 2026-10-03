@@ -58,6 +58,7 @@ npm run build
 │   └── popup/
 │       ├── index.html                # 設定画面
 │       └── main.ts
+├── utils/settings.ts                 # 設定（横幅）の型・既定値・読み込み（popup と content script で共有）
 ├── public/
 │   ├── icon/                         # アイコン（16/48/128px）
 │   └── _locales/                     # 多言語メッセージ（<locale>/messages.json）
@@ -72,6 +73,7 @@ npm run build
 - Enter キー制御は `stopImmediatePropagation` で Zone.js/Angular のイベントを阻止
 - IME 変換中は `e.isComposing` で Enter 処理をスキップ
 - スクロール処理は CSP 制約のため `world: 'MAIN'` の別コンテンツスクリプトとして実行（MAIN world では拡張機能 API は使えない。参考: https://wxt.dev/guide/essentials/content-scripts.html ）
+- 横幅設定は `chrome.storage.local` に単位ごとの別キー（`widthUnit` / `maxWidthPercent` / `maxWidthPx`）で保存する。v1.1.0 までの `maxWidth` は、ポップアップを開いたときに新キーへ移行する（移行前でも読み込み時に旧キーを解釈するので表示は変わらない）
 - 多言語対応は Chrome 標準の `i18n` API + `public/_locales/`（`default_locale: en`）。文言を追加するときは全ロケールの `messages.json` に同じキーを追加する（参考: https://wxt.dev/guide/essentials/i18n.html ）
 - 英語・日本語以外の翻訳は機械的に作成したもので、ネイティブチェックは未実施
 - Ctrl+Enter / Ctrl+C の送信・停止ボタンは、入力欄（`input-area-v2`）の中だけを class（`.send-button` / `.stop`）で探し、内側の `button` をクリックする。`aria-label` は UI 言語で変わり、サイドバーのチャット履歴のタイトルにも一致するため使わない。Gemini の DOM に依存するセレクタは `utils/gemini-dom.ts` にまとめている

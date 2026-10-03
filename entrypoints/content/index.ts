@@ -1,6 +1,7 @@
 // Castor - Gemini UI Enhancer
 import './style.css';
 import { findSendButton, findStopButton } from '@/utils/gemini-dom';
+import { STORAGE_KEYS, type WidthSettings, loadWidthSettings, toCssWidth } from '@/utils/settings';
 
 // input / textarea 内の選択は window.getSelection() に現れないため、個別に確認する
 const hasTextSelection = (target: EventTarget | null): boolean => {
@@ -14,38 +15,30 @@ const hasTextSelection = (target: EventTarget | null): boolean => {
   return !!window.getSelection()?.toString();
 };
 
-type WidthUnit = 'percent' | 'px';
-
-const DEFAULT_WIDTH: Record<WidthUnit, number> = { percent: 90, px: 1200 };
-
 export default defineContentScript({
   matches: ['https://gemini.google.com/*'],
   runAt: 'document_end',
   main(ctx) {
     // --- 横幅設定の適用 ---
-    let cachedUnit: WidthUnit = 'percent';
-    let cachedWidth = DEFAULT_WIDTH.percent;
-
-    const applyMaxWidth = () => {
-      const css = cachedUnit === 'percent' ? `${cachedWidth}%` : `${cachedWidth}px`;
-      document.documentElement.style.setProperty('--castor-max-width', css);
+    const applyMaxWidth = (settings: WidthSettings) => {
+      document.documentElement.style.setProperty('--castor-max-width', toCssWidth(settings));
     };
 
-    browser.storage.local.get(['maxWidth', 'widthUnit']).then((data) => {
-      cachedUnit = (data.widthUnit as WidthUnit | undefined) || 'percent';
-      cachedWidth = (data.maxWidth as number | undefined) || DEFAULT_WIDTH[cachedUnit];
-      applyMaxWidth();
-    }).catch(() => {
-      // 拡張の再読み込み直後など storage が使えない場合は既定値のまま
-      applyMaxWidth();
-    });
-
-    const onStorageChanged = (changes: Record<string, { newValue?: unknown }>) => {
-      if (changes.widthUnit) cachedUnit = (changes.widthUnit.newValue as WidthUnit | undefined) || 'percent';
-      if (changes.maxWidth) {
-        cachedWidth = (changes.maxWidth.newValue as number | undefined) || DEFAULT_WIDTH[cachedUnit];
+    // 変更が続いたとき、非同期の読み込み結果が前後して古い値が反映されないよう、最新の読み込みだけを適用する
+    let loadSeq = 0;
+    const reloadWidth = async () => {
+      const seq = ++loadSeq;
+      try {
+        const settings = await loadWidthSettings();
+        if (seq === loadSeq) applyMaxWidth(settings);
+      } catch {
+        // 拡張の再読み込み直後など storage が使えない場合は、現在の値（初回は CSS 既定の 90%）のまま
       }
-      if (changes.maxWidth || changes.widthUnit) applyMaxWidth();
+    };
+    void reloadWidth();
+
+    const onStorageChanged = (changes: Record<string, unknown>) => {
+      if (STORAGE_KEYS.some((key) => key in changes)) void reloadWidth();
     };
     browser.storage.onChanged.addListener(onStorageChanged);
     ctx.onInvalidated(() => browser.storage.onChanged.removeListener(onStorageChanged));
