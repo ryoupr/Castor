@@ -8,6 +8,11 @@
 //
 // クリックするのは内側の button に揃える。button へのクリックは外側の div にもバブリングするので、
 // クリック処理がどちらに付いていても動く。また、無効状態の button はクリックを発火しない。
+//
+// チャット履歴のスクロールコンテナ（2026-10-03 に確認）:
+//   infinite-scroller.chat-history  （scrollTop・scrollHeight と scroll イベントが使える）
+// infinite-scroller はほかにもあるが、スクロールするのは chat-history のものだけ。
+// 最後のメッセージの下には余白があるため、メッセージへの scrollIntoView では最下部まで届かない。
 
 const INPUT_AREA = 'input-area-v2';
 const SEND_BUTTON = '.send-button:not(.stop) button';
@@ -15,7 +20,17 @@ const STOP_BUTTON = '.send-button.stop button';
 // class が変わったときの予備（Material Symbols のアイコン名は UI 言語に依存しない）
 const STOP_ICON = 'button mat-icon[fonticon="stop"]';
 
+const CHAT_SCROLLER = 'infinite-scroller.chat-history';
+// class が変わったときの予備（メッセージを含み、スクロールできる infinite-scroller を探す）
+const ANY_SCROLLER = 'infinite-scroller';
+const MESSAGE = 'model-response, user-query';
+
 const inputArea = (): Element | null => document.querySelector(INPUT_AREA);
+
+export const findChatScroller = (): HTMLElement | null =>
+  document.querySelector<HTMLElement>(CHAT_SCROLLER) ??
+  [...document.querySelectorAll<HTMLElement>(ANY_SCROLLER)].find((el) => el.scrollHeight > el.clientHeight && !!el.querySelector(MESSAGE)) ??
+  null;
 
 export const findSendButton = (): HTMLButtonElement | null =>
   inputArea()?.querySelector<HTMLButtonElement>(SEND_BUTTON) ?? null;
