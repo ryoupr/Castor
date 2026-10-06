@@ -13,5 +13,23 @@
   },
   "scrollToBottom": {
     "message": "सबसे नीचे स्क्रॉल करें"
+  },
+  "featuresLabel": {
+    "message": "सुविधाएँ"
+  },
+  "featureEnterNewline": {
+    "message": "Enter से नई पंक्ति"
+  },
+  "featureCtrlEnterSend": {
+    "message": "Ctrl+Enter से भेजें"
+  },
+  "featureCmdEnterSend": {
+    "message": "Cmd+Enter से भेजें (macOS)"
+  },
+  "featureCtrlCStop": {
+    "message": "Ctrl+C से जनरेशन रोकें"
+  },
+  "featureScrollButton": {
+    "message": "नीचे स्क्रॉल करने का बटन"
   }
 }

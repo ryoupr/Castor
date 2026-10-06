@@ -13,5 +13,23 @@
   },
   "scrollToBottom": {
     "message": "Прокрутить вниз"
+  },
+  "featuresLabel": {
+    "message": "Функции"
+  },
+  "featureEnterNewline": {
+    "message": "Enter — новая строка"
+  },
+  "featureCtrlEnterSend": {
+    "message": "Ctrl+Enter — отправить"
+  },
+  "featureCmdEnterSend": {
+    "message": "Cmd+Enter — отправить (macOS)"
+  },
+  "featureCtrlCStop": {
+    "message": "Ctrl+C — остановить генерацию"
+  },
+  "featureScrollButton": {
+    "message": "Кнопка прокрутки вниз"
   }
 }

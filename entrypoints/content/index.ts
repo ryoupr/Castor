@@ -1,5 +1,6 @@
 // Castor - Gemini UI Enhancer
 import './style.css';
+import { DEFAULT_FEATURES, FEATURES_KEY, type Features, loadFeatures } from '@/utils/features';
 import { findChatScroller, findSendButton, findStopButton } from '@/utils/gemini-dom';
 import { STORAGE_KEYS, type WidthSettings, loadWidthSettings, toCssWidth } from '@/utils/settings';
 
@@ -42,8 +43,26 @@ export default defineContentScript({
     };
     void reloadWidth();
 
+    // --- 機能ごとのオン・オフ ---
+    // 読み込みが終わるまでは既定値（すべての機能が v1.1.0 までと同じ動作）で動く
+    let features: Features = { ...DEFAULT_FEATURES };
+    let featuresSeq = 0;
+    const reloadFeatures = async () => {
+      const seq = ++featuresSeq;
+      try {
+        const loaded = await loadFeatures();
+        if (seq !== featuresSeq) return;
+        features = loaded;
+        scheduleUpdate();
+      } catch {
+        // storage が使えない場合は現在の設定のまま
+      }
+    };
+    void reloadFeatures();
+
     const onStorageChanged = (changes: Record<string, unknown>) => {
       if (STORAGE_KEYS.some((key) => key in changes)) void reloadWidth();
+      if (FEATURES_KEY in changes) void reloadFeatures();
     };
     browser.storage.onChanged.addListener(onStorageChanged);
     ctx.onInvalidated(() => browser.storage.onChanged.removeListener(onStorageChanged));
@@ -59,6 +78,10 @@ export default defineContentScript({
     ctx.onInvalidated(() => btn.remove());
 
     const updateScrollBtn = () => {
+      if (!features.scrollButton) {
+        btn.classList.remove('castor-visible');
+        return;
+      }
       const scroller = findChatScroller();
       btn.classList.toggle('castor-visible', !!scroller && distanceFromBottom(scroller) >= SCROLL_BTN_THRESHOLD);
     };
@@ -90,7 +113,8 @@ export default defineContentScript({
       findChatScroller()?.scrollTo({ top: Number.MAX_SAFE_INTEGER, behavior: 'smooth' });
     });
 
-    // --- Enter=改行, Ctrl+Enter=送信 ---
+    // --- Enter=改行, Ctrl+Enter（設定により Cmd+Enter も）=送信 ---
+    // オフにした機能のキーは何もせず Gemini 本来の動作に任せる
     ctx.addEventListener(
       document,
       'keydown',
@@ -100,12 +124,13 @@ export default defineContentScript({
         const editor = e.target.closest('.ql-editor');
         if (!editor) return;
 
-        if (e.ctrlKey) {
-          // Ctrl+Enter: 送信ボタンをクリック
+        const isSendKey = e.ctrlKey ? features.ctrlEnterSend : e.metaKey && features.cmdEnterSend;
+        if (isSendKey) {
+          // Ctrl+Enter / Cmd+Enter: 送信ボタンをクリック
           e.preventDefault();
           e.stopImmediatePropagation();
           findSendButton()?.click();
-        } else if (!e.shiftKey && !e.metaKey) {
+        } else if (!e.ctrlKey && !e.shiftKey && !e.metaKey && features.enterNewline) {
           // Enter単体: Geminiのデフォルト送信を阻止し、Shift+Enter を送り直して改行させる。
           // 入力欄の Quill が Shift+Enter を改行として処理するので、Quill のデータ・Undo とずれない
           // （非推奨の document.execCommand('insertLineBreak') では、改行が本文の文字として入り、Quill とずれていた）。
@@ -135,6 +160,7 @@ export default defineContentScript({
       document,
       'keydown',
       (e) => {
+        if (!features.ctrlCStop) return;
         if (!e.ctrlKey || e.metaKey || e.altKey || e.shiftKey || e.isComposing) return;
         // 非ラテン文字の配列（e.key が 'с' などになる）では物理キー位置 e.code で判定する。
         // ラテン文字の配列では e.key だけを見る（Dvorak では KeyC が 'j' なので、e.code を使うと Ctrl+J を横取りしてしまう）

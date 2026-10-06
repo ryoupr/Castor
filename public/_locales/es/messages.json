@@ -13,5 +13,23 @@
   },
   "scrollToBottom": {
     "message": "Desplazarse al final"
+  },
+  "featuresLabel": {
+    "message": "Funciones"
+  },
+  "featureEnterNewline": {
+    "message": "Enter inserta un salto de línea"
+  },
+  "featureCtrlEnterSend": {
+    "message": "Ctrl+Enter envía"
+  },
+  "featureCmdEnterSend": {
+    "message": "Cmd+Enter envía (macOS)"
+  },
+  "featureCtrlCStop": {
+    "message": "Ctrl+C detiene la generación"
+  },
+  "featureScrollButton": {
+    "message": "Botón para desplazarse al final"
   }
 }

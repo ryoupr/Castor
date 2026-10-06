@@ -18,5 +18,29 @@
   "scrollToBottom": {
     "message": "Scroll to bottom",
     "description": "Tooltip of the scroll-to-bottom button on Gemini"
+  },
+  "featuresLabel": {
+    "message": "Features",
+    "description": "Popup heading for the feature on/off toggles"
+  },
+  "featureEnterNewline": {
+    "message": "Enter inserts a newline",
+    "description": "Popup toggle: Enter key inserts a newline instead of sending"
+  },
+  "featureCtrlEnterSend": {
+    "message": "Ctrl+Enter sends",
+    "description": "Popup toggle: Ctrl+Enter sends the prompt"
+  },
+  "featureCmdEnterSend": {
+    "message": "Cmd+Enter sends (macOS)",
+    "description": "Popup toggle: Cmd+Enter also sends the prompt (macOS)"
+  },
+  "featureCtrlCStop": {
+    "message": "Ctrl+C stops generating",
+    "description": "Popup toggle: Ctrl+C stops response generation"
+  },
+  "featureScrollButton": {
+    "message": "Scroll-to-bottom button",
+    "description": "Popup toggle: show the scroll-to-bottom button"
   }
 }

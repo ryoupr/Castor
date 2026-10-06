@@ -13,5 +13,23 @@
   },
   "scrollToBottom": {
     "message": "Rolar até o fim"
+  },
+  "featuresLabel": {
+    "message": "Recursos"
+  },
+  "featureEnterNewline": {
+    "message": "Enter insere uma quebra de linha"
+  },
+  "featureCtrlEnterSend": {
+    "message": "Ctrl+Enter envia"
+  },
+  "featureCmdEnterSend": {
+    "message": "Cmd+Enter envia (macOS)"
+  },
+  "featureCtrlCStop": {
+    "message": "Ctrl+C interrompe a geração"
+  },
+  "featureScrollButton": {
+    "message": "Botão para rolar até o fim"
   }
 }

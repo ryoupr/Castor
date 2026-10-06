@@ -5,7 +5,7 @@
   <title>Castor</title>
   <style>
     body { width: 260px; padding: 16px; font-family: "Google Sans", sans-serif; font-size: 14px; background: rgb(19, 19, 20); color: rgb(227, 227, 227); }
-    label { display: block; margin-bottom: 8px; font-size: 13px; opacity: 0.7; }
+    label, .heading { display: block; margin-bottom: 8px; font-size: 13px; opacity: 0.7; }
     input[type="number"] { width: 80px; padding: 8px 10px; background: rgb(40, 40, 42); color: rgb(227, 227, 227); border: 1px solid rgb(60, 60, 62); border-radius: 12px; font-size: 14px; outline: none; }
     input[type="number"]:focus { border-color: #8ab4f8; }
     .row { display: flex; align-items: center; gap: 8px; }
@@ -15,6 +15,9 @@
     .toggle button { flex: 1; border: none; padding: 8px 12px; cursor: pointer; background: transparent; font-size: 13px; color: rgb(227, 227, 227); transition: background 0.15s; }
     .toggle button:hover { background: rgb(55, 55, 58); }
     .toggle button.active { background: #8ab4f8; color: rgb(19, 19, 20); font-weight: 500; }
+    .section { margin-top: 18px; }
+    label.feature { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; opacity: 1; cursor: pointer; }
+    .feature input { margin: 0; accent-color: #8ab4f8; cursor: pointer; }
   </style>
 </head>
 <body>
@@ -26,6 +29,15 @@
   <div class="row">
     <input type="number" id="maxWidth">
     <span id="unitLabel">%</span>
+  </div>
+  <div class="section">
+    <div class="heading" data-i18n="featuresLabel">Features</div>
+    <!-- 文言は span に入れる（label に data-i18n を付けると textContent の置き換えで checkbox が消える） -->
+    <label class="feature"><input type="checkbox" data-feature="enterNewline"><span data-i18n="featureEnterNewline">Enter inserts a newline</span></label>
+    <label class="feature"><input type="checkbox" data-feature="ctrlEnterSend"><span data-i18n="featureCtrlEnterSend">Ctrl+Enter sends</span></label>
+    <label class="feature"><input type="checkbox" data-feature="cmdEnterSend"><span data-i18n="featureCmdEnterSend">Cmd+Enter sends (macOS)</span></label>
+    <label class="feature"><input type="checkbox" data-feature="ctrlCStop"><span data-i18n="featureCtrlCStop">Ctrl+C stops generating</span></label>
+    <label class="feature"><input type="checkbox" data-feature="scrollButton"><span data-i18n="featureScrollButton">Scroll-to-bottom button</span></label>
   </div>
   <div id="status"></div>
   <script type="module" src="./main.ts"></script>
