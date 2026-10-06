@@ -38,7 +38,7 @@ npm run build
 | `./script/generate-icons.sh <画像>` | アイコン一括生成（`public/icon/`） |
 | `./script/resize-to-1280x800.sh <画像>` | スクリーンショットを 1280x800 にリサイズ |
 
-PR と main への push では、GitHub Actions（`.github/workflows/ci.yml`）が `npm ci` → `npm run compile` → `npm run build` を実行します。
+ブランチは `feature/*` → `develop` → `main` の順に流します。`develop` / `main` への PR と `develop` への push では、GitHub Actions（`.github/workflows/ci.yml`）が `npm ci` → `npm run compile` → `npm run zip` を実行します。`main` への push で `package.json` か `wxt.config.ts` が変わり、その `version` のタグ（`v{version}`）がまだ無ければ、`.github/workflows/release.yml` が GitHub Release を作成します（Secrets を設定すれば Chrome Web Store への提出も行う）。そのため、`develop` → `main` の PR では必ず `version` を上げてください。詳しくは [CONTRIBUTING.md](CONTRIBUTING.md) を参照してください。
 
 ## 使い方
 
@@ -51,7 +51,9 @@ PR と main への push では、GitHub Actions（`.github/workflows/ci.yml`）�
 ## ファイル構成
 
 ```
-├── .github/workflows/ci.yml          # CI（型チェックとビルド）
+├── .github/workflows/ci.yml          # CI（型チェックと ZIP ビルド、ストア審査中のマージ防止）
+├── .github/workflows/release.yml     # リリース（GitHub Release 作成、Chrome Web Store への提出）
+├── CONTRIBUTING.md                   # ブランチ運用とリリース手順
 ├── package.json                      # name / version / description（manifest に反映）
 ├── wxt.config.ts                     # manifest 設定（name / permissions / action）
 ├── entrypoints/
