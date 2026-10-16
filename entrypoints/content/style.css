@@ -40,7 +40,9 @@ user-query {
   padding-right: 2vw !important;
 }
 
-/* 最下部スクロールボタン */
+/* 最下部スクロールボタン
+ * 色は Gemini のテーマ用 CSS 変数（body の dark-theme / light-theme で切り替わる --gem-sys-color--*）に合わせる。
+ * 2026-10-06 に確認した変数。Gemini 側で変数が無くなったときは、v1.1.0 までのダーク配色で表示する */
 .castor-scroll-btn {
   position: fixed;
   bottom: 100px;
@@ -48,9 +50,9 @@ user-query {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  border: 1px solid rgb(60, 60, 62);
-  background: rgb(40, 40, 42);
-  color: rgb(227, 227, 227);
+  border: 1px solid var(--gem-sys-color--outline-variant, rgb(60, 60, 62));
+  background: var(--gem-sys-color--surface-container-high, rgb(40, 40, 42));
+  color: var(--gem-sys-color--on-surface, rgb(227, 227, 227));
   font-size: 18px;
   cursor: pointer;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
@@ -62,7 +64,7 @@ user-query {
 }
 
 .castor-scroll-btn:hover {
-  background: rgb(55, 55, 58);
+  background: var(--gem-sys-color--surface-container-highest, rgb(55, 55, 58));
 }
 
 .castor-scroll-btn.castor-visible {
